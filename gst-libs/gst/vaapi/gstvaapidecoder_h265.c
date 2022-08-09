@@ -2035,7 +2035,7 @@ fill_picture (GstVaapiDecoderH265 * decoder, GstVaapiPictureH265 * picture)
   COPY_FIELD (pps, num_extra_slice_header_bits);
 
   /* FIXME: Set correct value as mentioned in va_dec_hevc.h */
-  pic_param->st_rps_bits = 0;
+  //pic_param->st_rps_bits = 0;
 
 #if VA_CHECK_VERSION(1,2,0)
   if (pic_rext_param) {
@@ -2353,8 +2353,10 @@ decode_ref_pic_set (GstVaapiDecoderH265 * decoder,
     gint numtotalcurr = 0;
 
     /* this is based on CurrRpsIdx described in spec */
-    if (!slice_hdr->short_term_ref_pic_set_sps_flag)
+    if (!slice_hdr->short_term_ref_pic_set_sps_flag) {
       stRefPic = &slice_hdr->short_term_ref_pic_sets;
+      pic_param->st_rps_bits = slice_hdr->short_term_ref_pic_set_size;
+    }
     else if (sps->num_short_term_ref_pic_sets)
       stRefPic =
           &sps->short_term_ref_pic_set[slice_hdr->short_term_ref_pic_set_idx];
